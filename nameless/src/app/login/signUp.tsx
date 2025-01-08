@@ -150,7 +150,6 @@ export default function SignUp() {
             />
             <CardFooter>
               <Button
-                variant="outline"
                 className="hover:bg-gray-500 transition-colors duration-300 rounded"
                 type="submit"
               >

@@ -62,7 +62,7 @@ export default function PlayerPage() {
   return (
     <div className="h-screen w-screen flex items-center justify-center flex-col gap-4 bg-black text-white">
       <h1>Welcome to the player page!</h1>
-      <h1>Here, you can view all your RPG tables and/or characters</h1>
+      <h1>Here, you can view all your RPG games and/or characters</h1>
       <Button
         variant="outline"
         className="hover:bg-gray-500 transition-colors duration-300 rounded"
@@ -70,10 +70,10 @@ export default function PlayerPage() {
       >
         Character List
       </Button>
-      <h1>List of tables you're in:</h1>
+      <h1>List of games you're in:</h1>
       <div>
         <Table>
-          <TableCaption>YOUR RPG TABLES.</TableCaption>
+          <TableCaption>YOUR RPG GAMES.</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">Name</TableHead>
