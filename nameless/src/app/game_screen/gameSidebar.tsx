@@ -1,6 +1,7 @@
 "use client";
 
 import { Home, Search, Settings } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import {
   Sidebar,
@@ -13,6 +14,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarFooter,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 
 import {
@@ -21,7 +23,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import useRouter from "next/router";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -48,8 +50,9 @@ const items = [
 
 export default function GameSidebar() {
   const router = useRouter();
+
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarContent className="bg-black text-white">
         <SidebarGroup>
           <SidebarGroupLabel className="text-white">
@@ -57,6 +60,8 @@ export default function GameSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
+              <SidebarTrigger className=" shadow-sm hover:bg-white" />
+
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
@@ -76,7 +81,13 @@ export default function GameSidebar() {
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton>Player</SidebarMenuButton>
+                <SidebarMenuButton className="flex h-12">
+                  <Avatar>
+                    <AvatarImage src="https://cdn.discordapp.com/attachments/687389331920519203/1326749882702102629/token_1.png?ex=67808f9d&is=677f3e1d&hm=ec4635b8d4626362099b2d6a17478121054757243506bb95b5f452f9971c7a26&" />
+                    <AvatarFallback>HH</AvatarFallback>
+                  </Avatar>
+                  Chigga Orc
+                </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 side="bottom"

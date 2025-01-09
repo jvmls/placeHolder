@@ -1,9 +1,10 @@
-"use client";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export default function Test() {
+export function AvatarDemo() {
   return (
-    <div className="container">
-      <div className="box"></div>
-    </div>
+    <Avatar>
+      <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+      <AvatarFallback>CN</AvatarFallback>
+    </Avatar>
   );
 }

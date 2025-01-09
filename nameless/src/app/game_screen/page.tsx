@@ -7,11 +7,10 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function GameScreen() {
   return (
-    <SidebarProvider>
+    <SidebarProvider className=" ">
       <GameSidebar />
 
       <div className="flex h-screen w-screen">
-        <SidebarTrigger className="bg-white p-2 border rounded shadow-md m-2 absolute" />
         <GamePanel />
       </div>
     </SidebarProvider>
