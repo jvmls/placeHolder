@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -6,6 +7,7 @@ import {
 } from "@/components/ui/resizable";
 
 import useDragger from "@/hooks/useDragger";
+import useOpenNewWindow from "@/hooks/useOpenNewWindow";
 
 export default function GamePanel() {
   return (
@@ -19,7 +21,7 @@ export default function GamePanel() {
           >
             {/* Enemies Panel */}
             <ResizablePanel defaultSize={50} minSize={20} className="h-full">
-              <div className="flex h-full items-center relative overflow-hidden border">
+              <div className="flex h-full items-center overflow-hidden border">
                 <span className="font-semibold">Enemies</span>
               </div>
             </ResizablePanel>
@@ -46,8 +48,11 @@ export default function GamePanel() {
           maxSize={80}
           className="h-full"
         >
-          <div className="flex h-full items-center justify-center p-6 border">
-            <span className="font-semibold">Bottom Panel</span>
+          <div className="flex h-full flex-col items-center justify-center p-6 border">
+            <h1 className="font-semibold">Bottom Panel</h1>
+            <Button onClick={useOpenNewWindow("<h1> Character Sheet<h1>")}>
+              Open Character Sheet
+            </Button>
           </div>
         </ResizablePanel>
       </ResizablePanelGroup>
