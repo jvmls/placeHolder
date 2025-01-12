@@ -1,14 +1,17 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
-import Skills from "./Skills";
+import Skills from "./skills";
 import Combat from "./Combat";
+import Backstory from "./Backstory";
+import Spells from "./Spells";
+import MainStats from "./mainStats";
 
 export default function CharacterSheet() {
   const [editMode, setEditMode] = useState(false);
 
   return (
-    <div className="bg-black text-white p-8 font-sans flex-col h-screen w-screen">
+    <div className="bg-black text-white p-8 font-sans flex-col h-full w-full">
       {/* Header Section */}
       <header className="flex justify-between items-center mb-6">
         <h1 className="text-4xl font-bold">Call of Cthulhu</h1>
@@ -74,27 +77,8 @@ export default function CharacterSheet() {
       </section>
 
       {/* Attributes Section */}
-      <section className="grid grid-cols-6 gap-4 mt-6">
-        {[
-          { label: "Strength", value: 55 },
-          { label: "Dexterity", value: 75 },
-          { label: "Intelligence", value: 85 },
-          { label: "Constitution", value: 60 },
-          { label: "Appearance", value: 70 },
-          { label: "Power", value: 60 },
-          { label: "Size", value: 50 },
-          { label: "Education", value: 75 },
-          { label: "Luck", value: 50 },
-          { label: "Sanity", value: 60 },
-        ].map((attr) => (
-          <div
-            key={attr.label}
-            className="bg-green-900 p-4 rounded-lg text-center"
-          >
-            <p>{attr.label}</p>
-            <h3 className="text-2xl font-bold">{attr.value}</h3>
-          </div>
-        ))}
+      <section>
+        <MainStats />
       </section>
 
       {/* Skills Section */}
@@ -122,6 +106,12 @@ export default function CharacterSheet() {
           </TabsContent>
           <TabsContent value="Combat">
             <Combat />
+          </TabsContent>
+          <TabsContent value="Backstory">
+            <Backstory />
+          </TabsContent>
+          <TabsContent value="Spells">
+            <Spells />
           </TabsContent>
           <TabsContent value="Backstory"></TabsContent>
           <TabsContent value="Spells"></TabsContent>
