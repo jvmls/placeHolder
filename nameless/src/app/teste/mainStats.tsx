@@ -36,7 +36,7 @@ export default function MainStats() {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <section className="grid grid-cols-3 gap-4">
       <div className="grid grid-cols-3 grid-row-4 gap-4 mt-6">
         {stats.map((attr, index) => (
           <div
@@ -71,6 +71,6 @@ export default function MainStats() {
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
