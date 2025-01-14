@@ -9,7 +9,7 @@ export default function PlayerInfo() {
   const [playerInfo, setPlayerInfo] = useState([
     { label: "Character Name", value: "" },
     { label: "Occupation", value: "Sexologist" },
-    { label: "Age", value: "69" },
+    { label: "Age", value: "" },
     { label: "Birthplace", value: "" },
     { label: "Residence", value: "Xique Xique Bahia" },
   ]);
@@ -32,15 +32,15 @@ export default function PlayerInfo() {
   };
 
   return (
-    <section className="bg-green-900 p-6 rounded">
+    <section className="  rounded">
       <div className="grid grid-cols-3 gap-4 mb-6">
         {playerInfo.map((info, index) => (
           <div key={info.label}>
             <p>{info.label}</p>
             <h3 className="text-xl">
               <textarea
-                className="bg-green-900 border resize-none overflow-hidden text-white w-full h-8 placeholder:text-slate-500"
-                placeholder={`Name your ${info.label.toLowerCase()}`}
+                className="bg-slate-900 border resize-none overflow-hidden text-white w-full h-8 placeholder:text-slate-500"
+                placeholder={`Write your ${info.label.toLowerCase()}`}
                 value={info.value}
                 onChange={(e) => handleChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(e, index)}

@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
@@ -39,13 +40,10 @@ export default function MainStats() {
     <section className="grid grid-cols-3 gap-4">
       <div className="grid grid-cols-3 grid-row-4 gap-4 mt-6">
         {stats.map((attr, index) => (
-          <div
-            key={attr.label}
-            className="bg-green-900 p-4 rounded text-center mb-4"
-          >
-            <p>{attr.label}</p>
+          <div key={attr.label} className=" p-4 rounded text-center mb-4">
+            <Button>{attr.label}</Button>
             <Input
-              className="text-2xl font-bold text-center placeholder:text-slate-500"
+              className="text-2xl font-bold text-center bg-slate-900 placeholder:text-slate-500"
               placeholder={attr.value === 0 ? "50" : attr.value.toString()}
             />
           </div>
@@ -53,18 +51,15 @@ export default function MainStats() {
       </div>
       <div className="grid grid-cols-1 gap-4 mt-6">
         {vitals.map((attr, index) => (
-          <div
-            key={attr.label}
-            className="bg-green-900 p-4 rounded text-center mb-3"
-          >
+          <div key={attr.label} className=" p-4 rounded text-center mb-3">
             <p>{attr.label}</p>
             <div className="grid grid-cols-2 gap-4">
               <Input
-                className="text-2xl font-bold text-center placeholder:text-slate-500"
+                className="text-2xl font-bold text-center placeholder:text-slate-500 bg-slate-900"
                 placeholder={attr.value === 0 ? "25" : attr.value.toString()}
               />
               <Input
-                className="text-2xl font-bold text-center placeholder:text-slate-500"
+                className="text-2xl font-bold text-center placeholder:text-slate-500 bg-slate-900"
                 placeholder={attr.value === 0 ? "25" : attr.value.toString()}
               />
             </div>
