@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Toggle } from "@radix-ui/react-toggle";
 import { useState } from "react";
 
 export default function MainStats() {
@@ -36,6 +37,12 @@ export default function MainStats() {
     setVitals(updatedVitals);
   };
 
+  const [majorWound, setMajorWound] = useState(false);
+  const [unconscious, setUnconscious] = useState(false);
+  const [dying, setDying] = useState(false);
+  const [tempInsane, setTempInsane] = useState(false);
+  const [indefInsane, setIndefInsane] = useState(false);
+
   return (
     <section className="grid grid-cols-3 gap-4">
       <div className="grid grid-cols-3 grid-row-4 gap-4 mt-6">
@@ -65,6 +72,50 @@ export default function MainStats() {
             </div>
           </div>
         ))}
+      </div>
+      <div className="bg-slate-950 flex flex-col place-items-center justify-center w-full h-full gap-5">
+        <h2>Conditions</h2>
+        <div
+          onClick={() => setMajorWound(!majorWound)}
+          className={`text-center select-none w-4/5 h-22 cursor-pointer ${
+            majorWound ? "bg-red-600" : "bg-slate-400"
+          }`}
+        >
+          Major Wound
+        </div>
+        <div
+          onClick={() => setUnconscious(!unconscious)}
+          className={`text-center select-none w-4/5 h-22 cursor-pointer ${
+            unconscious ? "bg-red-600" : "bg-slate-400"
+          }`}
+        >
+          Unconscious
+        </div>
+        <div
+          onClick={() => setDying(!dying)}
+          className={`text-center select-none w-4/5 h-22 cursor-pointer ${
+            dying ? "bg-red-600" : "bg-slate-400"
+          }`}
+        >
+          Dying
+        </div>
+        <h2>Insanities</h2>
+        <div
+          onClick={() => setTempInsane(!tempInsane)}
+          className={`text-center select-none w-4/5 h-22 cursor-pointer ${
+            tempInsane ? "bg-red-600" : "bg-slate-400"
+          }`}
+        >
+          Temp Insane
+        </div>
+        <div
+          onClick={() => setIndefInsane(!indefInsane)}
+          className={`text-center select-none w-4/5 h-22 cursor-pointer ${
+            indefInsane ? "bg-red-600" : "bg-slate-400"
+          }`}
+        >
+          Indef. Insane
+        </div>
       </div>
     </section>
   );

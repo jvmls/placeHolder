@@ -7,6 +7,7 @@ import Spells from "./Spells";
 import MainStats from "./mainStats";
 import PlayerInfo from "./playerInfo";
 import { useState } from "react";
+import Possessions from "./Possessions";
 
 export default function CharacterSheet() {
   const [whisper, setWhisper] = useState(false);
@@ -38,9 +39,9 @@ export default function CharacterSheet() {
       <MainStats />
 
       {/* Skills Section */}
-      <section>
-        <Tabs defaultValue="Skills" className="text-2xl font-bold mb-4">
-          <TabsList className="flex w-full gap-4">
+      <section className="pt-10">
+        <Tabs defaultValue="Skills" className="text-2xl font-bold mb-4 ">
+          <TabsList className="flex w-full gap-4 pb-10">
             <TabsTrigger
               className="border flex-1 px-4 py-2 text-center transition-colors data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=inactive]:bg-gray-800 data-[state=inactive]:text-gray-400"
               value="Skills"
@@ -83,6 +84,9 @@ export default function CharacterSheet() {
           </TabsContent>
           <TabsContent value="Spells">
             <Spells />
+          </TabsContent>
+          <TabsContent value="Possessions">
+            <Possessions />
           </TabsContent>
         </Tabs>
       </section>

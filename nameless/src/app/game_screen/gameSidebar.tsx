@@ -1,8 +1,6 @@
 "use client";
 
 import { Home, Search, Settings } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
 import {
   Sidebar,
   SidebarProvider,
@@ -54,6 +52,7 @@ export default function GameSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarContent className="bg-black text-white">
+        {" "}
         <SidebarGroup>
           <SidebarGroupLabel className="text-white">
             Application
@@ -73,45 +72,13 @@ export default function GameSidebar() {
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
+            <Separator className="my-4" h-1 />
+            <SidebarGroupLabel className="text-white">
+              Draggable Objects:
+            </SidebarGroupLabel>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="bg-black text-white">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton className="flex h-12">
-                  <Avatar>
-                    <AvatarImage src="https://cdn.discordapp.com/attachments/687389331920519203/1326749882702102629/token_1.png?ex=67808f9d&is=677f3e1d&hm=ec4635b8d4626362099b2d6a17478121054757243506bb95b5f452f9971c7a26&" />
-                    <AvatarFallback>HH</AvatarFallback>
-                  </Avatar>
-                  Chigga Orc
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                side="bottom"
-                className="w-[--radix-popper-anchor-width] text-white"
-              >
-                <DropdownMenuItem>
-                  <Button className="w-full">Character</Button>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Button className="w-full">Features</Button>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Button
-                    className="w-full hover:bg-red-600"
-                    onClick={() => router.push("/login")}
-                  >
-                    Exit
-                  </Button>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
     </Sidebar>
   );
 }

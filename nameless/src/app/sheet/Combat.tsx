@@ -148,8 +148,8 @@ export default function Combat() {
 
   return (
     <>
-      <div className="grid grid-cols-7 bg-black gap-4 grid-rows-1 ">
-        <h2 className="grid grid-cols-4 bg-black gap-4">Weapons</h2>
+      <div className="grid grid-cols-7 gap-4 grid-rows-1 ">
+        <h2 className="grid grid-cols-4 gap-4">Weapons</h2>
         <Button
           onClick={handleAddWeapon}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"

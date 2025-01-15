@@ -9,7 +9,24 @@ import {
 import useDragger from "@/hooks/useDragger";
 import useOpenNewWindow from "@/hooks/useOpenNewWindow";
 
+const useOpenPopupWindow = (
+  url: string,
+  options: string = "width=600,height=400"
+) => {
+  const openPopup = () => {
+    // Open the popup window with the URL and window features
+    const popupWindow = window.open(url, "_blank", options);
+    if (!popupWindow) {
+      console.error("Failed to open popup window.");
+    }
+  };
+
+  return openPopup;
+};
+
 export default function GamePanel() {
+  const sheetPopup = useOpenPopupWindow("/sheet", "width=800,height=600");
+
   return (
     <div className="h-full w-full ">
       <ResizablePanelGroup direction="vertical">
@@ -50,9 +67,7 @@ export default function GamePanel() {
         >
           <div className="flex h-full flex-col items-center justify-center p-6 border">
             <h1 className="font-semibold">Bottom Panel</h1>
-            <Button onClick={useOpenNewWindow("<h1> Character Sheet<h1>")}>
-              Open Character Sheet
-            </Button>
+            <Button onClick={sheetPopup}>Open Character Sheet</Button>
           </div>
         </ResizablePanel>
       </ResizablePanelGroup>
