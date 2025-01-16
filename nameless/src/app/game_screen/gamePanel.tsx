@@ -5,9 +5,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-
-import useDragger from "@/hooks/useDragger";
-import useOpenNewWindow from "@/hooks/useOpenNewWindow";
+import { useDragAndDrop } from "@/hooks/useDrag&Drop";
 
 const useOpenPopupWindow = (
   url: string,
@@ -26,6 +24,8 @@ const useOpenPopupWindow = (
 
 export default function GamePanel() {
   const sheetPopup = useOpenPopupWindow("/sheet", "width=800,height=600");
+  const { droppedObjects, handleDrop, handleDragOver, deleteObject } =
+    useDragAndDrop();
 
   return (
     <div className="h-full w-full ">
@@ -38,8 +38,30 @@ export default function GamePanel() {
           >
             {/* Enemies Panel */}
             <ResizablePanel defaultSize={50} minSize={20} className="h-full">
-              <div className="flex h-full items-center overflow-hidden border">
-                <span className="font-semibold">Enemies</span>
+              <div
+                className="flex h-full items-center overflow-hidden border"
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+              >
+                <span className="font-semibold absolute">Enemies</span>
+                <div className="w-full h-full relative overflow-hidden bg-gray-100 p-2 rounded">
+                  {droppedObjects.length > 0 ? (
+                    droppedObjects.map((obj, index) => (
+                      <div
+                        key={index}
+                        id={`${index}`}
+                        className="h-10 w-10  cursor-pointer select-none "
+                        onClick={() => deleteObject(index)}
+                      >
+                        {obj}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-gray-500 italic">
+                      Drag objects here!
+                    </div>
+                  )}
+                </div>
               </div>
             </ResizablePanel>
 

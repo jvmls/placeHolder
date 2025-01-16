@@ -1,5 +1,11 @@
 import { useEffect, useRef } from "react";
 
+type DraggableObjectProps = {
+  id: string;
+  content: string;
+  onDelete: () => void;
+};
+
 function useDragger(id: string): void {
   const isClicked = useRef<boolean>(false);
 
