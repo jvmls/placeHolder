@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, Search, Settings } from "lucide-react";
+import { Home, Search, Settings, Hand, Dices } from "lucide-react";
 import {
   Sidebar,
   SidebarProvider,
@@ -83,9 +83,9 @@ export default function GameSidebar() {
         </SidebarGroup>
         <Separator className="my-4 h-0.5 bg-slate-800 rounded" />
         <SidebarGroup>
-          <SidebarGroupLabel className="w-full gap-5  items-start text-white">
-            Draggable Objects:
-          </SidebarGroupLabel>
+          <SidebarMenuItem className="w-full gap-5 items-start text-white">
+            <Hand /> Draggable Objects:
+          </SidebarMenuItem>
           <SidebarGroupContent className="space-y-4 flex flex-row items-center justify-between">
             {EnemiesList.map((enemy, index) => (
               <div
@@ -109,7 +109,7 @@ export default function GameSidebar() {
         <Separator className="my-4 h-0.5 bg-slate-800 rounded" />
         <SidebarGroup>
           <SidebarGroupLabel className="w-full gap-5 items-start text-white flex flex-col">
-            Rolls:
+            <Dices/> Rolls:
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <ScrollArea className="w-full h-40 bg-gray-800 p-2 rounded overflow-y-scroll text-sm scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-700">
