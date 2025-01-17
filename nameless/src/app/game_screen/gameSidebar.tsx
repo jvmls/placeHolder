@@ -22,6 +22,7 @@ import { useState } from "react";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 
 import EnemiesList from "../data/draggableList";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 
@@ -82,19 +83,26 @@ export default function GameSidebar() {
         </SidebarGroup>
         <Separator className="my-4 h-0.5 bg-slate-800 rounded" />
         <SidebarGroup>
-          <SidebarGroupLabel className="w-full gap-5 items-start text-white flex flex-col">
+          <SidebarGroupLabel className="w-full gap-5  items-start text-white">
             Draggable Objects:
           </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <div
-              className="h-10 w-10 bg-pink-500 text-black cursor-pointer select-none"
-              draggable
-              onDragStart={(e) =>
-                e.dataTransfer.setData("objectType", "pinkBox")
-              }
-            >
-              Pink Box
-            </div>
+          <SidebarGroupContent className="space-y-4 flex flex-row items-center justify-between">
+            {EnemiesList.map((enemy, index) => (
+              <div
+                key={index}
+                draggable
+                onDragStart={(e) =>
+                  e.dataTransfer.setData("enemy", JSON.stringify(enemy))
+                }
+                className="cursor-pointer"
+              >
+                <Avatar className="h-16 w-16">
+                  <AvatarImage src={enemy.style.backgroundImage.slice(5, -2)} />
+                  <AvatarFallback>{enemy.enemy[0]}</AvatarFallback>
+                </Avatar>
+                <div className="text-center text-sm mt-2">{enemy.enemy}</div>
+              </div>
+            ))}
           </SidebarGroupContent>
         </SidebarGroup>
 

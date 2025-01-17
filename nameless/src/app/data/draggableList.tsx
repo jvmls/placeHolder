@@ -17,6 +17,12 @@ const EnemiesList = [
       backgroundImage: "url('/assets/images/rapist_the_raper.jpg')",
     },
   },
+  {
+    enemy: "Bico SAAS",
+    style: {
+      backgroundImage: "url('/assets/images/bico_de_saas.jpg')",
+    },
+  },
 ];
 
 export default EnemiesList;

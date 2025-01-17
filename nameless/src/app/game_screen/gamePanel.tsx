@@ -1,98 +1,71 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
 import { useDragAndDrop } from "@/hooks/useDrag&Drop";
 
-const useOpenPopupWindow = (
-  url: string,
-  options: string = "width=600,height=400"
-) => {
-  const openPopup = () => {
-    // Open the popup window with the URL and window features
-    const popupWindow = window.open(url, "_blank", options);
+export default function GamePanel() {
+  const sheetPopup = () => {
+    const popupWindow = window.open("/sheet", "_blank", "width=800,height=600");
     if (!popupWindow) {
       console.error("Failed to open popup window.");
     }
   };
 
-  return openPopup;
-};
-
-export default function GamePanel() {
-  const sheetPopup = useOpenPopupWindow("/sheet", "width=800,height=600");
-  const { droppedObjects, handleDrop, handleDragOver, deleteObject } =
+  const { items, handleDragStart, handleDrop, handleDragOver } =
     useDragAndDrop();
 
   return (
-    <div className="h-full w-full ">
-      <ResizablePanelGroup direction="vertical">
+    <div className="h-full w-full">
+      <div className="flex flex-col h-full">
         {/* Top Section */}
-        <ResizablePanel defaultSize={50} className="h-full">
-          <ResizablePanelGroup
-            direction="horizontal"
-            className="h-full rounded-lg border"
-          >
-            {/* Enemies Panel */}
-            <ResizablePanel defaultSize={50} minSize={20} className="h-full">
-              <div
-                className="flex h-full items-center overflow-hidden border"
-                onDrop={handleDrop}
-                onDragOver={handleDragOver}
-              >
-                <span className="font-semibold absolute">Enemies</span>
-                <div className="w-full h-full relative overflow-hidden bg-gray-100 p-2 rounded">
-                  {droppedObjects.length > 0 ? (
-                    droppedObjects.map((obj, index) => (
-                      <div
-                        key={index}
-                        id={`${index}`}
-                        className="h-10 w-10  cursor-pointer select-none "
-                        onClick={() => deleteObject(index)}
-                      >
-                        {obj}
-                      </div>
-                    ))
+        <div className="flex flex-row h-1/2">
+          {/* Enemies Panel */}
+          <div className="flex-1 relative border bg-gray-100 rounded overflow-hidden">
+            <div
+              className="relative h-full w-full"
+              onDrop={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                handleDrop(e, rect);
+              }}
+              onDragOver={handleDragOver}
+            >
+              {items.map((item) => (
+                <div
+                  key={item.id}
+                  className="w-20 h-20 absolute cursor-pointer text-black overflow-hidden"
+                  style={{
+                    top: `${item.y}px`,
+                    left: `${item.x}px`,
+                  }}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, item.id)}
+                >
+                  {item.style ? (
+                    <span
+                      className="w-full h-full bg-cover flex"
+                      style={item.style}
+                    />
                   ) : (
-                    <div className="text-gray-500 italic">
-                      Drag objects here!
-                    </div>
+                    <span>{item.label}</span>
                   )}
                 </div>
-              </div>
-            </ResizablePanel>
+              ))}
+            </div>
+          </div>
 
-            {/* Horizontal Resize Handle */}
-            <ResizableHandle className="" />
-
-            {/* Players Panel */}
-            <ResizablePanel defaultSize={50} minSize={20} className="h-full">
-              <div className="flex h-full items-center justify-center p-6 border">
-                <span className="font-semibold">Players</span>
-              </div>
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        </ResizablePanel>
-
-        {/* Vertical Resize Handle */}
-        <ResizableHandle className="h-4 w-full bg-blue-500" />
+          {/* Players Panel */}
+          <div className="flex-1 flex items-center justify-center p-6 border">
+            <span className="font-semibold">Players</span>
+          </div>
+        </div>
 
         {/* Bottom Section */}
-        <ResizablePanel
-          defaultSize={50}
-          minSize={20}
-          maxSize={80}
-          className="h-full"
-        >
-          <div className="flex h-full flex-col items-center justify-center p-6 border">
+        <div className="h-1/2 flex items-center justify-center p-6 border">
+          <div className="flex flex-col items-center">
             <h1 className="font-semibold">Bottom Panel</h1>
             <Button onClick={sheetPopup}>Open Character Sheet</Button>
           </div>
-        </ResizablePanel>
-      </ResizablePanelGroup>
+        </div>
+      </div>
     </div>
   );
 }

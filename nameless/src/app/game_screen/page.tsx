@@ -9,7 +9,6 @@ export default function GameScreen() {
   return (
     <SidebarProvider className=" ">
       <GameSidebar />
-
       <div className="flex h-screen w-screen">
         <GamePanel />
       </div>
