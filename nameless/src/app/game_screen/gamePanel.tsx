@@ -28,6 +28,9 @@ export default function GamePanel() {
               }}
               onDragOver={handleDragOver}
             >
+              <span className="right-1/2 bottom-1/2 absolute select-none">
+                ENEMIES
+              </span>
               {items.map((item) => (
                 <div
                   key={item.id}
