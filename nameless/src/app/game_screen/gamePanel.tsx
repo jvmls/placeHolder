@@ -19,7 +19,7 @@ export default function GamePanel() {
         {/* Top Section */}
         <div className="flex flex-row h-1/2">
           {/* Enemies Panel */}
-          <div className="flex-1 relative border bg-gray-100 rounded overflow-hidden">
+          <div className="flex-1 relative border bg-gray-100 rounded overflow-hidden object-contain">
             <div
               className="relative h-full w-full"
               onDrop={(e) => {
@@ -34,7 +34,7 @@ export default function GamePanel() {
               {items.map((item) => (
                 <div
                   key={item.id}
-                  className="w-20 h-20 absolute cursor-pointer text-black overflow-hidden"
+                  className=" absolute w-20 h-20 cursor-pointer text-black overflow-hidden object-contain"
                   style={{
                     top: `${item.y}px`,
                     left: `${item.x}px`,

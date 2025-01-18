@@ -42,7 +42,7 @@ export default function DraggableSidebar({
               className="cursor-pointer"
             >
               <Avatar className="h-16 w-16">
-                <AvatarImage src={enemy.style.backgroundImage.slice(5, -2)} />
+                <AvatarImage src={enemy.style.backgroundImage.slice(5, -2)}/>
                 <AvatarFallback>{enemy.enemy[0]}</AvatarFallback>
               </Avatar>
               <div className="text-center text-sm mt-2">{enemy.enemy}</div>
