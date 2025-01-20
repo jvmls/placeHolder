@@ -6,8 +6,8 @@ import SignIn from "./signIn";
 export default function LoginPage() {
   return (
     <div className="h-screen w-screen flex items-center justify-center flex-col gap-4 bg-black text-white">
-      <Tabs defaultValue="account" className="w-[400px] rounded">
-        <TabsList className="grid w-full grid-cols-2">
+      <Tabs defaultValue="sign-in" className="w-[400px] rounded">
+        <TabsList className="grid w-full grid-cols-2 gap-2">
           <TabsTrigger className="border" value="sign-in">
             Sign in
           </TabsTrigger>
