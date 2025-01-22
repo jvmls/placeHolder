@@ -14,89 +14,67 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const tables = [
-  {
-    table_name: "Table 1",
-    table_status: "Complete",
-    players: "@x, @y, @z, @w, @a",
-    system: "DnD 5e",
-    character: "Daniel Paladino",
-  },
-  {
-    table_name: "Table 2",
-    table_status: "Currently Playing",
-    players: "@x, @y, @z, @w, @a",
-    system: "Call of Cthulhu",
-    character: "Chigga",
-  },
-  {
-    table_name: "Table 3",
-    table_status: "Not Started",
-    players: "@x, @y, @z, @w, @a",
-    system: "Vampire The Masquerade",
-    character: "Wigga",
-  },
-  {
-    table_name: "Table 4",
-    table_status: "Complete",
-    players: "@x, @y, @z, @w, @a",
-    system: "DnD 3.5",
-    character: "Nigga",
-  },
-  {
-    table_name: "Table 5",
-    table_status: "Hiatus",
-    players: "@x, @y, @z, @w, @a",
-    system: "Call of Cthulhu",
-    character: "Alberto Roberto",
-  },
-];
+import PlayerDropMenu from "@/components/playerDropMenu";
+
+import games from "../data/constants/Games";
 
 export default function PlayerPage() {
   const [hoveredCharacter, setHoveredCharacter] = useState<string | null>(null);
+  const [tablerow, setTableRow] = useState(games.map((game) => ({ ...game })));
   const router = useRouter();
+
+  const handleRemoveGame = (gameId: string) => {
+    setTableRow((prevGames) =>
+      prevGames.filter((game) => game.game_id !== gameId)
+    );
+  };
+
   function handleRowClick() {
     console.log("Row clicked");
   }
 
   return (
     <div className="h-screen w-screen flex items-center justify-center flex-col gap-4 bg-black text-white">
-      <h1>Welcome to the player page!</h1>
-      <h1>Here, you can view all your RPG games and/or characters</h1>
+      <h1>Here, you can create your games!!</h1>
       <Button
         variant="outline"
         className="hover:bg-gray-500 transition-colors duration-300 rounded"
         type="submit"
       >
-        Character List
+        Create a Game
       </Button>
       <h1>List of games you're in:</h1>
-      <div>
+      <div className="w-full max-w-4xl h-full max-h-96 overflow-auto">
         <Table>
-          <TableCaption>YOUR RPG GAMES.</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">Name</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>System</TableHead>
               <TableHead className="text-right">Players</TableHead>
+              <TableHead>Options</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {tables.map((table) => (
+          <TableBody className="gap-2 overflow">
+            {tablerow.map((game) => (
               <TableRow
-                key={table.table_name}
-                onMouseEnter={() => setHoveredCharacter(table.character)}
-                onMouseLeave={() => setHoveredCharacter(null)}
-                onClick={() => router.push("/redirecionar")} // Redirects to /redirecionar needs to be inplemented with the api it is a placeholder for now
+                key={game.game_id}
+                // onMouseEnter={() => setHoveredCharacter(game.character)}
+                //onMouseLeave={() => setHoveredCharacter(null)}
+                //onClick={() => router.push("/game_screen/gameID")} Redirects to /redirecionar needs to be inplemented with the api it is a placeholder for now
                 className="cursor-pointer hover:bg-gray-800 transition-colors duration-200"
               >
-                <TableCell className="font-medium">
-                  {table.table_name}
+                <TableCell className="font-medium">{game.game_name}</TableCell>
+                <TableCell>{game.game_status}</TableCell>
+                <TableCell>{game.game_system}</TableCell>
+                <TableCell className="text-right">{game.game_system}</TableCell>
+                <TableCell>{game.game_creation_date}</TableCell>
+                <TableCell>
+                  <PlayerDropMenu
+                    gameId={game.game_id}
+                    onRemove={handleRemoveGame}
+                  />
                 </TableCell>
-                <TableCell>{table.table_status}</TableCell>
-                <TableCell>{table.system}</TableCell>
-                <TableCell className="text-right">{table.players}</TableCell>
               </TableRow>
             ))}
           </TableBody>
