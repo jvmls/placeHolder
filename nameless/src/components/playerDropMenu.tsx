@@ -16,13 +16,12 @@ import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 
 interface PlayerDropMenuProps {
   gameId: string;
-  onRemove: (gameId: string) => void;
+  onDelete: (game_id: String) => void;
 }
 
-// when implement roles change name from leave to remove game and edit to only show for the DM
 export default function PlayerDropMenu({
   gameId,
-  onRemove,
+  onDelete,
 }: PlayerDropMenuProps) {
   const router = useRouter();
   return (
@@ -57,7 +56,10 @@ export default function PlayerDropMenu({
             </DropdownMenuItem>
             <DropdownMenuItem
               className="text-blue-700 cursor-pointer"
-              onClick={() => onRemove(gameId)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(gameId);
+              }}
             >
               Leave
             </DropdownMenuItem>

@@ -1,7 +1,9 @@
-export default function Games() {
+"use client";
+
+export default function gamePage() {
   return (
     <div>
-      <h1>PlaceHolder</h1>
+      <h1>Game Page</h1>
     </div>
   );
 }

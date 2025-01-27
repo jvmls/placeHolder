@@ -1,95 +1,107 @@
 "use client";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
 import {
   Table,
   TableBody,
-  TableCaption,
-  TableCell,
   TableFooter,
   TableHead,
   TableHeader,
   TableRow,
+  TableCell,
 } from "@/components/ui/table";
+import CreateGame from "@/components/createGameDialog";
 
 import PlayerDropMenu from "@/components/playerDropMenu";
-
-import games from "../data/constants/Games";
+import { Skeleton } from "@/components/ui/skeleton";
+import useBackendHandlers from "@/hooks/useBPH"; // Import the custom hook
 
 export default function PlayerPage() {
-  const [hoveredCharacter, setHoveredCharacter] = useState<string | null>(null);
-  const [tablerow, setTableRow] = useState(games.map((game) => ({ ...game })));
+  const [isCreateGameModalOpen, setIsCreateGameModalOpen] = useState(false);
   const router = useRouter();
 
-  const handleRemoveGame = (gameId: string) => {
-    setTableRow((prevGames) =>
-      prevGames.filter((game) => game.game_id !== gameId)
-    );
-  };
+  const {
+    tableRow,
+    loading,
+    error,
+    fetchGames,
+    handleAddGame,
+    handleUpdateGame,
+    handleDeleteGame,
+  } = useBackendHandlers();
 
-  function handleRowClick() {
-    console.log("Row clicked");
-  }
+  useEffect(() => {
+    fetchGames();
+  }, [fetchGames]);
 
   return (
     <div className="h-screen w-screen flex items-center justify-center flex-col gap-4 bg-black text-white">
-      <h1>Here, you can create your games!!</h1>
+      <h1>
+        Here, you can view the games you are participating or create a new
+        game!!
+      </h1>
       <Button
         variant="outline"
         className="hover:bg-gray-500 transition-colors duration-300 rounded"
-        type="submit"
+        type="button"
+        onClick={() => setIsCreateGameModalOpen(true)}
       >
         Create a Game
+        {isCreateGameModalOpen && (
+          <CreateGame
+            isOpen={isCreateGameModalOpen}
+            onClose={() => setIsCreateGameModalOpen(false)} // Close the modal
+          />
+        )}
       </Button>
-      <h1>List of games you're in:</h1>
+
+      <h1>Your list of Games:</h1>
       <div className="w-full max-w-4xl h-full max-h-96 overflow-auto">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Name</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>System</TableHead>
-              <TableHead className="text-right">Players</TableHead>
-              <TableHead>Options</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody className="gap-2 overflow">
-            {tablerow.map((game) => (
-              <TableRow
-                key={game.game_id}
-                // onMouseEnter={() => setHoveredCharacter(game.character)}
-                //onMouseLeave={() => setHoveredCharacter(null)}
-                //onClick={() => router.push("/game_screen/gameID")} Redirects to /redirecionar needs to be inplemented with the api it is a placeholder for now
-                className="cursor-pointer hover:bg-gray-800 transition-colors duration-200"
-              >
-                <TableCell className="font-medium">{game.game_name}</TableCell>
-                <TableCell>{game.game_status}</TableCell>
-                <TableCell>{game.game_system}</TableCell>
-                <TableCell className="text-right">{game.game_system}</TableCell>
-                <TableCell>{game.game_creation_date}</TableCell>
-                <TableCell>
-                  <PlayerDropMenu
-                    gameId={game.game_id}
-                    onRemove={handleRemoveGame}
-                  />
-                </TableCell>
+        {loading ? (
+          <div className="w-full h-full flex items-center justify-center relative">
+            <Skeleton className="h-full w-full rounded-xl bg-gray-500" />
+          </div>
+        ) : error ? (
+          <p className="text-red-500">Error: {error}</p>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">Name</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>System</TableHead>
+                <TableHead className="text-right">Players</TableHead>
+                <TableHead>Options</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan={4} className="text-center">
-                {hoveredCharacter && (
-                  <span className="text-green-500">
-                    You're playing as: {hoveredCharacter}
-                  </span>
-                )}
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {tableRow.map((game) => (
+                <TableRow
+                  key={game.game_id}
+                  className="cursor-pointer hover:bg-gray-800 transition-colors duration-200"
+                >
+                  <TableCell className="font-medium">
+                    {game.game_name}
+                  </TableCell>
+                  <TableCell>{game.game_status}</TableCell>
+                  <TableCell>{game.game_system}</TableCell>
+                  <TableCell className="text-right">
+                    {game.game_players.join(", ")}
+                  </TableCell>
+                  <TableCell>
+                    <PlayerDropMenu
+                      gameId={game.game_id}
+                      onDelete={() => handleDeleteGame(game.game_id)}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </div>
     </div>
   );
