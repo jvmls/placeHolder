@@ -1,6 +1,7 @@
 const express = require("express");
 const Games = require("../models/game");
 const CurrentID = require("../models/idModel");
+const gameSystemList = require("../models/gameSystemList");
 
 const router = express.Router();
 
@@ -16,6 +17,21 @@ router.get("/games", async (req, res) => {
   } catch (err) {
     console.log("Error fetching games:", err);
     res.status(500).send("Error retrieving games.");
+  }
+});
+
+router.get("/games/:game_id", async (req, res) => {
+  try {
+    const game = await Games.findOne({ game_id: req.params.game_id });
+
+    if (!game) {
+      return res.status(404).send("Game not found.");
+    }
+
+    res.json(game);
+  } catch (err) {
+    console.log("Error fetching game:", err);
+    res.status(500).send("Error retrieving game.");
   }
 });
 
@@ -41,6 +57,28 @@ router.post("/games", async (req, res) => {
   }
 });
 
+router.put("/games/:game_id", async (req, res) => {
+  try {
+    const id = req.params.game_id;
+    const updatedData = req.body;
+
+    const updatedGame = await Games.findOneAndUpdate(
+      { game_id: id },
+      updatedData,
+      { new: true }
+    );
+
+    if (!updatedGame) {
+      return res.status(404).send("Game not found.");
+    }
+
+    res.status(200).json(updatedGame);
+  } catch (err) {
+    console.log("Error updating game:", err);
+    res.status(500).send("Error updating game.");
+  }
+});
+
 router.delete("/games/:game_id", async (req, res) => {
   try {
     const id = req.params.game_id;
@@ -53,6 +91,21 @@ router.delete("/games/:game_id", async (req, res) => {
   } catch (err) {
     console.log("Error deleting game:", err);
     res.status(500).send("Error deleting game.");
+  }
+});
+
+router.get("/gameSys", async (req, res) => {
+  try {
+    const gameSystems = await gameSystemList.find();
+
+    if (!gameSystems || gameSystems.length === 0) {
+      return res.status(404).json({ message: "n ta fundando esse krl" });
+    }
+
+    res.json(gameSystems);
+  } catch (err) {
+    console.error("Error fetching game systems:", err);
+    res.status(500).json({ message: "Error retrieving game systems." });
   }
 });
 
