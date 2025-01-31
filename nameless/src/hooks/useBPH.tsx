@@ -1,11 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/router";
+import { toast } from "sonner";
 
 const useBackendHandlers = () => {
   const [tableRow, setTableRow] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [gameSystem, setGameSystem] = useState<any[]>([]);
 
   const fetchGames = async () => {
     try {
@@ -25,12 +26,29 @@ const useBackendHandlers = () => {
     }
   };
 
+  const fetchGameSystem = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/gameSys");
+      const availableGameSystems = response.data[0].available_game_systems;
+      setGameSystem(availableGameSystems);
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        setError(
+          err.response?.data?.message ||
+            "An error occurred while fetching data."
+        );
+      } else {
+        setError("An unexpected error occurred.");
+      }
+    }
+  };
+
   const handleAddGame = async (newGame: any) => {
     try {
       await axios.post("http://localhost:5000/api/games", newGame, {
         headers: { "Content-Type": "application/json" },
       });
-      alert("Game created successfully!");
+      toast("Game created successfully!");
       await fetchGames();
     } catch (err) {
       console.error("Error adding game:", err);
@@ -40,9 +58,11 @@ const useBackendHandlers = () => {
   const handleUpdateGame = async (gameId: string, updatedGame: any) => {
     try {
       await axios.put(`http://localhost:5000/api/games/${gameId}`, updatedGame);
+      toast("Successfully updated game. Game ID: " + gameId);
       await fetchGames();
     } catch (err) {
       console.error("Error updating game:", err);
+      alert("Failed to update game. Please try again.");
     }
   };
 
@@ -57,9 +77,11 @@ const useBackendHandlers = () => {
 
   return {
     tableRow,
+    gameSystem,
     loading,
     error,
     fetchGames,
+    fetchGameSystem,
     handleAddGame,
     handleUpdateGame,
     handleDeleteGame,

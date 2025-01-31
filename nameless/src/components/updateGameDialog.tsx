@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Form,
   FormControl,
@@ -13,14 +11,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -31,39 +21,61 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import useBackendHandlers from "@/hooks/useBPH";
-import { unstable_expirePath } from "next/cache";
+import axios from "axios";
 import { useEffect } from "react";
 
 const formSchema = z.object({
   game_name: z.string().min(1, { message: "Game name is required." }),
-  game_status: z.string(),
-  game_creation_date: z.date(),
+  game_status: z.enum(["playing", "hiatus", "finished"]),
   game_players: z.string().optional(),
   game_system: z.string().nonempty({ message: "Game system is required." }),
 });
 
 interface CreateGameProps {
   isOpen: boolean;
+  game_id: string;
   onClose: () => void;
 }
 
-export default function CreateGame({ isOpen, onClose }: CreateGameProps) {
+export default function UpdateGame({
+  isOpen,
+
+  game_id,
+  onClose,
+}: CreateGameProps) {
+  const { handleUpdateGame, fetchGames } = useBackendHandlers();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       game_name: "",
       game_status: "playing",
-      game_creation_date: new Date(),
       game_players: "",
       game_system: "",
     },
     mode: "onChange",
   });
 
-  const { handleAddGame, fetchGameSystem, gameSystem } = useBackendHandlers();
   useEffect(() => {
-    fetchGameSystem();
-  }, []);
+    const fetchGamesData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/games/${game_id}`
+        );
+
+        form.reset({
+          game_name: response.data.game_name,
+          game_status: response.data.game_status,
+          game_players: response.data.game_players,
+          game_system: response.data.game_system,
+        });
+      } catch (err) {
+        console.error("Error fetching game:", err);
+      }
+    };
+    fetchGamesData();
+  }, [game_id, form]);
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const playersArray = values.game_players
       ? values.game_players.split(",").map((player) => player.trim())
@@ -73,34 +85,22 @@ export default function CreateGame({ isOpen, onClose }: CreateGameProps) {
       ...values,
       game_players: playersArray,
     };
-
     console.log("Submitting form data:", formData);
-
     try {
-      await handleAddGame(formData);
-
+      await handleUpdateGame(game_id, formData);
       onClose();
     } catch (error) {
       console.error("Error:", error);
-
-      alert("Failed to create game. Please try again.");
+      alert("Failed to update game. Please try again.");
     }
   }
-
-  const systemList = [
-    "D&D 5e",
-    "Call of Cthulhu",
-    "Vampire: the Masquerade",
-    "HERO System",
-  ];
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[625px] bg-black border-slate-600 rounded-lg ">
+      <DialogContent className="sm:max-w-[625px] bg-black border-slate-600 rounded-lg">
         <DialogHeader>
-          <DialogTitle className="text-white">Create New Game</DialogTitle>
+          <DialogTitle className="text-white">Edit Game</DialogTitle>
           <DialogDescription className="text-white">
-            Fill out the details to create a new game.
+            Update the details of the game.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -113,7 +113,7 @@ export default function CreateGame({ isOpen, onClose }: CreateGameProps) {
                   <FormLabel>Game Name</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Enter the game name"
+                      placeholder="Update the game name"
                       {...field}
                       className="bg-slate-800 text-white border-slate-600"
                     />
@@ -127,11 +127,11 @@ export default function CreateGame({ isOpen, onClose }: CreateGameProps) {
               control={form.control}
               name="game_players"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white">Players</FormLabel>
+                <FormItem className="text-white">
+                  <FormLabel>Players</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Enter player names separated by commas"
+                      placeholder="Update player names separated by Spaces"
                       {...field}
                       className="bg-slate-800 text-white border-slate-600"
                     />
@@ -145,26 +145,15 @@ export default function CreateGame({ isOpen, onClose }: CreateGameProps) {
               control={form.control}
               name="game_system"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white">System</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="bg-slate-800 text-white border-slate-600">
-                        <SelectValue placeholder="Select a system" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="bg-slate-800 text-white border-slate-600">
-                      {gameSystem.map((system) => (
-                        <SelectItem
-                          key={system}
-                          value={system}
-                          className="cursor-pointer hover:bg-slate-700"
-                        >
-                          {system}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                <FormItem className="text-white">
+                  <FormLabel>System</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Update the RPG system"
+                      {...field}
+                      className="bg-slate-800 text-white border-slate-600"
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -174,7 +163,7 @@ export default function CreateGame({ isOpen, onClose }: CreateGameProps) {
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white"
             >
-              Create Game
+              {game_id ? "Update Game" : "Create Game"}
             </Button>
           </form>
         </Form>

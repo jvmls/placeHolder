@@ -17,13 +17,14 @@ import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 interface PlayerDropMenuProps {
   gameId: string;
   onDelete: (game_id: String) => void;
+  onEdit: (game_id: String) => void;
 }
 
 export default function PlayerDropMenu({
   gameId,
   onDelete,
+  onEdit,
 }: PlayerDropMenuProps) {
-  const router = useRouter();
   return (
     <>
       <DropdownMenu>
@@ -36,9 +37,7 @@ export default function PlayerDropMenu({
           <DropdownMenuGroup className="divide-y-2 divide divide-slate-800">
             <DropdownMenuItem
               className="text-blue-700 cursor-pointer"
-              onClick={() => {
-                router.push(`/player/${gameId}`);
-              }}
+              onClick={(e) => e.stopPropagation()}
             >
               Open
             </DropdownMenuItem>
@@ -50,7 +49,10 @@ export default function PlayerDropMenu({
             </DropdownMenuItem>
             <DropdownMenuItem
               className="text-blue-700 cursor-pointer"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(gameId);
+              }}
             >
               Edit
             </DropdownMenuItem>

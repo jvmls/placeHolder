@@ -18,17 +18,30 @@ import CreateGame from "@/components/createGameDialog";
 import PlayerDropMenu from "@/components/playerDropMenu";
 import { Skeleton } from "@/components/ui/skeleton";
 import useBackendHandlers from "@/hooks/useBPH"; // Import the custom hook
+import UpdateGame from "@/components/updateGameDialog";
+import ShowGame from "@/components/showGameDialog";
+import { toast } from "sonner";
 
 export default function PlayerPage() {
   const [isCreateGameModalOpen, setIsCreateGameModalOpen] = useState(false);
-  const router = useRouter();
+  const [isUpdateGameModalOpen, setIsUpdateGameModalOpen] = useState(false);
+  const [isGameDescriptionModalOpen, setGameDescriptionModalOpen] =
+    useState(false);
+  const [selectedGameId, setSelectedGameId] = useState<string | null>(null);
+  const handleEditClick = (gameId: string) => {
+    setSelectedGameId(gameId);
+    setIsUpdateGameModalOpen(true);
+  };
+  const handleRowClick = (gameId: string) => {
+    setSelectedGameId(gameId);
+    setGameDescriptionModalOpen(true);
+  };
 
   const {
     tableRow,
     loading,
     error,
     fetchGames,
-    handleAddGame,
     handleUpdateGame,
     handleDeleteGame,
   } = useBackendHandlers();
@@ -45,7 +58,7 @@ export default function PlayerPage() {
       </h1>
       <Button
         variant="outline"
-        className="hover:bg-gray-500 transition-colors duration-300 rounded"
+        className="hover:bg-gray-500 transition-colors  duration-300 rounded"
         type="button"
         onClick={() => setIsCreateGameModalOpen(true)}
       >
@@ -82,6 +95,7 @@ export default function PlayerPage() {
                 <TableRow
                   key={game.game_id}
                   className="cursor-pointer hover:bg-gray-800 transition-colors duration-200"
+                  onClick={() => handleRowClick(game.game_id)}
                 >
                   <TableCell className="font-medium">
                     {game.game_name}
@@ -95,12 +109,29 @@ export default function PlayerPage() {
                     <PlayerDropMenu
                       gameId={game.game_id}
                       onDelete={() => handleDeleteGame(game.game_id)}
+                      onEdit={() => handleEditClick(game.game_id)}
                     />
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
+        )}
+
+        {selectedGameId && (
+          <UpdateGame
+            isOpen={isUpdateGameModalOpen}
+            onClose={() => setIsUpdateGameModalOpen(false)}
+            game_id={selectedGameId}
+          />
+        )}
+
+        {selectedGameId && (
+          <ShowGame
+            isOpen={isGameDescriptionModalOpen}
+            onClose={() => setGameDescriptionModalOpen(false)}
+            game_id={selectedGameId}
+          />
         )}
       </div>
     </div>
